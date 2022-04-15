@@ -17,7 +17,6 @@ export class ProductsResolver {
   @Mutation(() => Product)
   @UseGuards(AuthorizationGuard)
   createProduct(@Args('data') data: CreateProductInput) {
-    console.log('oakos');
     return this.service.createProduct(data);
   }
 }
