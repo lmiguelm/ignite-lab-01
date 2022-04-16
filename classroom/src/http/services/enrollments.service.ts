@@ -6,10 +6,22 @@ import { PrismaService } from "../../database/prisma/prisma.service";
 export class EnrollmentsService {
   constructor(private prisma: PrismaService){}
 
-  async listAllEnrollmentss() {
+  async listAllEnrollments() {
     return await this.prisma.enrollment.findMany({
       where: {
-        canceledAt: null
+        canceledAt: null,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+  }
+
+  async listAllEnrollmentsByStudent(studentId: string) {
+    return await this.prisma.enrollment.findMany({
+      where: {
+        studentId,
+        canceledAt: null,
       },
       orderBy: {
         createdAt: 'desc'
