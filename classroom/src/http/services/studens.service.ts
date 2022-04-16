@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from "../../database/prisma/prisma.service";
+import { PrismaService } from '../../database/prisma/prisma.service';
 
 @Injectable()
 export class StudentsService {
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
   async listAllStudents() {
     return await this.prisma.student.findMany();
@@ -13,8 +13,16 @@ export class StudentsService {
   async getStudentById(StudentId: string) {
     return await this.prisma.student.findUnique({
       where: {
-        id: StudentId
-      }
+        id: StudentId,
+      },
+    });
+  }
+
+  async getStudentByAuthId(authUserId: string) {
+    return await this.prisma.student.findUnique({
+      where: {
+        authUserId,
+      },
     });
   }
 }
