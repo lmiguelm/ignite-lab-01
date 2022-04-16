@@ -1,8 +1,9 @@
 import { UseGuards } from "@nestjs/common";
-import { Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthorizationGuard } from "../../auth/authorization.guard";
 
 import { CoursesService } from "../../services/courses.service";
+import { CreateCourseInput } from "../inputs/create-course-input";
 
 import { Course } from "../models/course";
 
@@ -16,5 +17,11 @@ export class CoursesResolver {
   @UseGuards(AuthorizationGuard)
   async courses() {
     return await this.coursesService.listAllCourses();
+  }
+
+  @Mutation(() => Course)
+  @UseGuards(AuthorizationGuard)
+  async createCourse(@Args('data') data: CreateCourseInput) {
+    return this.coursesService.createCourse(data);
   }
 }
