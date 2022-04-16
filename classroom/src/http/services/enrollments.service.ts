@@ -7,6 +7,13 @@ export class EnrollmentsService {
   constructor(private prisma: PrismaService){}
 
   async listAllEnrollmentss() {
-    return await this.prisma.enrollment.findMany();
+    return await this.prisma.enrollment.findMany({
+      where: {
+        canceledAt: null
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
   }
 }

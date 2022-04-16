@@ -1,4 +1,6 @@
+import { UseGuards } from "@nestjs/common";
 import { Query, Resolver } from "@nestjs/graphql";
+import { AuthorizationGuard } from "../../auth/authorization.guard";
 
 import { EnrollmentsService } from "../../services/enrollments.service";
 
@@ -11,6 +13,7 @@ export class EnrollmentsResolver {
   ) {}
 
   @Query(() => [Enrollment])
+  @UseGuards(AuthorizationGuard)
   async enrollments() {
     return await this.enrollmentsService.listAllEnrollmentss();
   }
