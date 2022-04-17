@@ -17,6 +17,14 @@ export class CustomersService {
     });
   }
 
+  async getCustomerById(id: string) {
+    return await this.prisma.customer.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async createCustomer({ authUserId }: CreateCustomerParams) {
     return await this.prisma.customer.create({
       data: {
