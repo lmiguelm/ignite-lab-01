@@ -1,15 +1,16 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import slugify from 'slugify';
 
-import { PrismaService } from "../../database/prisma/prisma.service";
+import { PrismaService } from '../../database/prisma/prisma.service';
 
 type CreateCourseParams = {
+  slug?: string;
   title: string;
-}
+};
 
 @Injectable()
 export class CoursesService {
-  constructor(private prisma: PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
   async listAllCourses() {
     return await this.prisma.course.findMany();
@@ -18,27 +19,35 @@ export class CoursesService {
   async getCourseById(courseId: string) {
     return await this.prisma.course.findUnique({
       where: {
-        id: courseId
-      }
+        id: courseId,
+      },
     });
   }
 
-  async createCourse({ title }: CreateCourseParams) {
-
-    const slug = slugify(title, {
-      lower: true,
-      trim: true
+  async getCourseBySlug(slug: string) {
+    return await this.prisma.course.findUnique({
+      where: {
+        slug,
+      },
     });
+  }
 
-    if(await this.checkIfCoursesExists(slug)) {
-      throw new Error('Curso já cadastrado!')
+  async createCourse({
+    title,
+    slug = slugify(title, {
+      lower: true,
+      trim: true,
+    }),
+  }: CreateCourseParams) {
+    if (await this.checkIfCoursesExists(slug)) {
+      throw new Error('Curso já cadastrado!');
     }
 
     return await this.prisma.course.create({
       data: {
         title,
-        slug
-      }
+        slug,
+      },
     });
   }
 
